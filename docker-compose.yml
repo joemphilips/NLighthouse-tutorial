@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  postgre:
+    image: "postgres:latest"
+    ports:
+      - "5432:5432"
+    volumes:
+      - "/Users/miyamotojou/working/sandbox/csharp/NLightHouse/mydb/first:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_USER=hogehgoe
