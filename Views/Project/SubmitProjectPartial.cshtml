@@ -1,0 +1,9 @@
+@model Project
+
+<form asp-action="SubmitProject" method="POST">
+  <label asp-for="Title">Add a new Projects Title: </label>
+  <input asp-for="Title">
+  <label asp-for="Deadline">Add a new Projects Deadline: </label>
+  <input asp-for="Deadline">
+  <button type="submit">Add</button>
+</form>

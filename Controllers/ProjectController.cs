@@ -19,16 +19,34 @@ namespace NLightHouse.Controllers
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-      var projects = await _projectRepo.GetUserRelatedProjectsAsync(new Guid());
+      var projects = await _projectRepo.GetAllProjectsAsync();
       if (!projects.Any())
       {
-        return View();
+        return View(new ProjectViewModel() { isEmpty = true });
       }
       var model = new ProjectViewModel()
       {
-        Projects = projects
+        Projects = projects,
+        isEmpty = false
       };
       return View(model);
+    }
+
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> SubmitProject(Project p)
+    {
+      if (!ModelState.IsValid)
+      {
+        return RedirectToAction("Index");
+      }
+      var successful = await _projectRepo.AddProjectAsync(p);
+
+      if (!successful)
+      {
+        return BadRequest("Could not add Project");
+      }
+      return RedirectToAction("Index");
     }
   }
 }

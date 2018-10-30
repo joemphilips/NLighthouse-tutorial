@@ -15,10 +15,11 @@ namespace NLightHouse.Models
   }
   public class Project
   {
+    public string ProjectId { get; set; }
     public string Title { get; set; }
     public ProjectDetail Purpose { get; set; }
     public DateTime Deadline { get; set; }
-    public List<Person> Funders { get; set; }
-    public List<Person> Owners { get; set; }
+    public List<ProjectPerson> Funders { get; set; }
+    public List<ProjectPerson> Owners { get; set; }
   }
 }

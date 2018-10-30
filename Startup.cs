@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLightHouse.Services;
+using Npgsql;
 
 namespace NLightHouse
 {
@@ -31,7 +32,6 @@ namespace NLightHouse
         options.CheckConsentNeeded = context => true;
         options.MinimumSameSitePolicy = SameSiteMode.None;
       });
-
 
       services.AddDbContext<NLighthouseDbContext>();
       services.AddScoped<IProjectRepository, ProjectRepository>();

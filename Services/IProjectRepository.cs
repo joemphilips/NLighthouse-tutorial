@@ -6,6 +6,9 @@ namespace NLightHouse.Services
 {
   public interface IProjectRepository
   {
-    Task<Project[]> GetUserRelatedProjectsAsync(Guid UserId);
+    Task<Project[]> GetProjectsByFunderAsync(string UserId);
+    Task<bool> AddProjectAsync(Project newProject);
+
+    Task<Project[]> GetAllProjectsAsync();
   }
 }

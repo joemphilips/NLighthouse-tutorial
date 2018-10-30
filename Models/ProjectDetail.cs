@@ -1,7 +1,13 @@
+using System;
 namespace NLightHouse.Models
 {
   public class ProjectDetail
   {
-    public string description;
+    public ProjectDetail()
+    {
+      Id = Guid.NewGuid().ToString();
+    }
+    public string Id { get; set; }
+    public string description { get; set; }
   }
 }

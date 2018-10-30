@@ -15,16 +15,29 @@
         </tr>
       </thead>
 
-      @foreach (var item in Model.Projects)
-      {
+      @{ if (Model.isEmpty) {
         <tr>
           <td>
-            <input type="checkbox" class="done-checkbox">
+            model was emtpry
           </td>
-          <td>@item.Title</td>
-          <td>@item.Deadline</td>
         </tr>
       }
+      else {
+        foreach (var item in Model.Projects)
+        {
+          <tr>
+            <td>
+              <input type="checkbox" class="done-checkbox">
+            </td>
+            <td>@item.Title</td>
+            <td>@item.Deadline</td>
+          </tr>
+        }
+        }
+      }
     </table>
+  </div>
+  <div class="panel-heading add-item-form">
+    @await Html.PartialAsync("SubmitProjectPartial", new Project());
   </div>
 </div>
