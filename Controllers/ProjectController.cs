@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using NLightHouse.Models;
 using NLightHouse.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NLightHouse.Controllers
 {
+  [Authorize]
   public class ProjectController : Controller
   {
     private readonly IProjectRepository _projectRepo;
+    // private readonly UserManager<ApplicationUser> _userManager;
     public ProjectController(IProjectRepository projectRepo)
     {
       _projectRepo = projectRepo;
@@ -46,6 +49,23 @@ namespace NLightHouse.Controllers
       {
         return BadRequest("Could not add Project");
       }
+      return RedirectToAction("Index");
+    }
+
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteProject(Guid id)
+    {
+      if (id == Guid.Empty)
+      {
+        return RedirectToAction("Index");
+      }
+
+      var successful = await _projectRepo.CancelProjectAsync(id);
+      if (!successful)
+      {
+        return BadRequest("Could not cancel Project");
+      }
+
       return RedirectToAction("Index");
     }
   }

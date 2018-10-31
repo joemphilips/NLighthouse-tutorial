@@ -40,6 +40,11 @@ namespace NLightHouse.Services
     {
       return Task.FromResult(true);
     }
+
+    public Task<bool> CancelProjectAsync(Guid id)
+    {
+      return Task.FromResult(true);
+    }
   }
 
   public class ProjectRepository : IProjectRepository
@@ -68,6 +73,20 @@ namespace NLightHouse.Services
       _dbContext.Projects.Add(newProject);
       var saveResult = await _dbContext.SaveChangesAsync();
       return saveResult > 1;
+    }
+
+    public async Task<bool> CancelProjectAsync(Guid id)
+    {
+      var project = await _dbContext.Projects
+        .Where(x => x.ProjectId == id.ToString())
+        .SingleOrDefaultAsync();
+
+      if (project == null) return false;
+      project.Canceled = true;
+
+      var saveResult = await _dbContext.SaveChangesAsync();
+
+      return saveResult == 1;
     }
   }
 

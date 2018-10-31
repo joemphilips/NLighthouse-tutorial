@@ -27,7 +27,10 @@
         {
           <tr>
             <td>
-              <input type="checkbox" class="done-checkbox">
+              <form asp-action="DeleteProject" method="POST">
+                <input type="checkbox" class="project-checkbox">
+                <input type="hidden" name="id" value="@item.ProjectId">
+              </form>
             </td>
             <td>@item.Title</td>
             <td>@item.Deadline</td>
@@ -38,6 +41,6 @@
     </table>
   </div>
   <div class="panel-heading add-item-form">
-    @await Html.PartialAsync("SubmitProjectPartial", new Project());
+    @await Html.PartialAsync("SubmitProjectPartial", new Project())
   </div>
 </div>

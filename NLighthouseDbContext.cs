@@ -18,6 +18,7 @@ namespace NLightHouse
     }
 
     public DbSet<Person> Persons { get; set; }
+    public DbSet<ApplicationUser> User { get; set; }
     public DbSet<Project> Projects { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

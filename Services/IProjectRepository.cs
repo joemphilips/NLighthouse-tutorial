@@ -10,5 +10,7 @@ namespace NLightHouse.Services
     Task<bool> AddProjectAsync(Project newProject);
 
     Task<Project[]> GetAllProjectsAsync();
+
+    Task<bool> CancelProjectAsync(Guid id);
   }
 }

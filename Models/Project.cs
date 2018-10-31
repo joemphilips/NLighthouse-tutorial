@@ -19,6 +19,8 @@ namespace NLightHouse.Models
     public string Title { get; set; }
     public ProjectDetail Purpose { get; set; }
     public DateTime Deadline { get; set; }
+
+    public Boolean Canceled { get; set; }
     public List<ProjectPerson> Funders { get; set; }
     public List<ProjectPerson> Owners { get; set; }
   }
