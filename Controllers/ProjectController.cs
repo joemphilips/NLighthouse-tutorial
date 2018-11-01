@@ -14,15 +14,19 @@ namespace NLightHouse.Controllers
   public class ProjectController : Controller
   {
     private readonly IProjectRepository _projectRepo;
-    // private readonly UserManager<ApplicationUser> _userManager;
-    public ProjectController(IProjectRepository projectRepo)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public ProjectController(IProjectRepository projectRepo, UserManager<ApplicationUser> userManager)
     {
       _projectRepo = projectRepo;
+      _userManager = userManager;
     }
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-      var projects = await _projectRepo.GetAllProjectsAsync();
+      var currentUser = await _userManager.GetUserAsync(User);
+      if (currentUser == null) return Challenge();
+
+      var projects = await _projectRepo.GetUserRelatedProjectsAsync(currentUser);
       if (!projects.Any())
       {
         return View(new ProjectViewModel() { isEmpty = true });

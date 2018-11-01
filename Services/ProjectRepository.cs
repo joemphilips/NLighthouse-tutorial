@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using NLightHouse.Data;
 
 namespace NLightHouse.Services
 {
@@ -44,6 +45,16 @@ namespace NLightHouse.Services
     public Task<bool> CancelProjectAsync(Guid id)
     {
       return Task.FromResult(true);
+    }
+
+    public Task<Project[]> GetUserRelatedProjectsAsync(ApplicationUser user)
+    {
+      return Task.FromResult((new[]{ new Project
+      {
+        Title = "Test Project For User Related",
+        Purpose = new ProjectDetail(),
+        Deadline = DateTime.Now
+      }}));
     }
   }
 
@@ -87,6 +98,22 @@ namespace NLightHouse.Services
       var saveResult = await _dbContext.SaveChangesAsync();
 
       return saveResult == 1;
+    }
+
+    public async Task<Project[]> GetUserRelatedProjectsAsync(ApplicationUser user)
+    {
+      var fundedProjects = await _dbContext.Projects
+        .Include(x => x.Funders)
+        .Where(x => x.Funders.Any(f => f.PersonId == user.PersonId))
+        .ToListAsync();
+
+      var ownedProjects = await _dbContext.Projects
+        .Include(x => x.Owners)
+        .Where(x => x.Owners.Any(f => f.PersonId == user.PersonId))
+        .ToListAsync();
+
+      fundedProjects.AddRange(ownedProjects);
+      return fundedProjects.ToArray();
     }
   }
 

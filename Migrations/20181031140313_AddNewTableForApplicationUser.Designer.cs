@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NLightHouse.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -9,9 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NLightHouse.Migrations
 {
     [DbContext(typeof(NLighthouseDbContext))]
-    partial class NLighthouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181031140313_AddNewTableForApplicationUser")]
+    partial class AddNewTableForApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,9 +73,6 @@ namespace NLightHouse.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
@@ -112,8 +111,6 @@ namespace NLightHouse.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -185,12 +182,30 @@ namespace NLightHouse.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("NLightHouse.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("PersonId");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
+                });
+
             modelBuilder.Entity("NLightHouse.Models.Person", b =>
                 {
                     b.Property<string>("PersonId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ApplicationUserId");
+                    b.Property<string>("ApplicationUserUserId");
+
+                    b.Property<string>("ApplicationUserUserId1");
+
+                    b.Property<string>("ApplicationUserUserId2");
 
                     b.Property<string>("Name");
 
@@ -202,8 +217,11 @@ namespace NLightHouse.Migrations
 
                     b.HasKey("PersonId");
 
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
+                    b.HasIndex("ApplicationUserUserId");
+
+                    b.HasIndex("ApplicationUserUserId1");
+
+                    b.HasIndex("ApplicationUserUserId2");
 
                     b.HasIndex("PersonId1");
 
@@ -251,6 +269,10 @@ namespace NLightHouse.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ApplicationUserUserId");
+
+                    b.Property<string>("ApplicationUserUserId1");
+
                     b.Property<string>("PersonId");
 
                     b.Property<string>("PersonId1");
@@ -261,6 +283,10 @@ namespace NLightHouse.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserUserId");
+
+                    b.HasIndex("ApplicationUserUserId1");
+
                     b.HasIndex("PersonId");
 
                     b.HasIndex("PersonId1");
@@ -270,17 +296,6 @@ namespace NLightHouse.Migrations
                     b.HasIndex("ProjectId1");
 
                     b.ToTable("ProjectPerson");
-                });
-
-            modelBuilder.Entity("NLightHouse.Models.ApplicationUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("PersonId");
-
-                    b.ToTable("ApplicationUser");
-
-                    b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -330,9 +345,17 @@ namespace NLightHouse.Migrations
 
             modelBuilder.Entity("NLightHouse.Models.Person", b =>
                 {
-                    b.HasOne("NLightHouse.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("InfoAsPerson")
-                        .HasForeignKey("NLightHouse.Models.Person", "ApplicationUserId");
+                    b.HasOne("NLightHouse.Models.ApplicationUser")
+                        .WithMany("Blocked")
+                        .HasForeignKey("ApplicationUserUserId");
+
+                    b.HasOne("NLightHouse.Models.ApplicationUser")
+                        .WithMany("Follower")
+                        .HasForeignKey("ApplicationUserUserId1");
+
+                    b.HasOne("NLightHouse.Models.ApplicationUser")
+                        .WithMany("Following")
+                        .HasForeignKey("ApplicationUserUserId2");
 
                     b.HasOne("NLightHouse.Models.Person")
                         .WithMany("Following")
@@ -356,6 +379,14 @@ namespace NLightHouse.Migrations
 
             modelBuilder.Entity("NLightHouse.Models.ProjectPerson", b =>
                 {
+                    b.HasOne("NLightHouse.Models.ApplicationUser")
+                        .WithMany("FundedProject")
+                        .HasForeignKey("ApplicationUserUserId");
+
+                    b.HasOne("NLightHouse.Models.ApplicationUser")
+                        .WithMany("OwnedProject")
+                        .HasForeignKey("ApplicationUserUserId1");
+
                     b.HasOne("NLightHouse.Models.Person", "Person")
                         .WithMany("FundedProject")
                         .HasForeignKey("PersonId");

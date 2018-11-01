@@ -3,10 +3,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace NLightHouse
+namespace NLightHouse.Data
 {
-  public partial class NLighthouseDbContext : DbContext
+  public partial class NLighthouseDbContext : IdentityDbContext<ApplicationUser>
   {
     public NLighthouseDbContext()
     {
@@ -30,6 +32,7 @@ namespace NLightHouse
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
+      base.OnModelCreating(builder);
 
       builder.Entity<ProjectPerson>()
        .HasKey(pp => pp.Id);
@@ -53,6 +56,14 @@ namespace NLightHouse
       builder.Entity<Person>()
         .HasMany(p => p.Blocked);
 
+      builder.Entity<Person>()
+        .HasOne(p => p.ApplicationUser)
+        .WithOne(au => au.InfoAsPerson);
+
+      builder.Entity<ApplicationUser>()
+        .HasOne(a => a.InfoAsPerson)
+        .WithOne(p => p.ApplicationUser)
+        .HasForeignKey(typeof(Person).ToString());
       /*
             builder.Entity<Person>()
               .HasMany(per => per.OwnedProject)

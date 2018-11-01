@@ -10,7 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLightHouse.Services;
+using NLightHouse.Models;
+using NLightHouse.Data;
 using Npgsql;
+using Microsoft.AspNetCore.Identity;
 
 namespace NLightHouse
 {
@@ -35,6 +38,8 @@ namespace NLightHouse
 
       services.AddDbContext<NLighthouseDbContext>();
       services.AddScoped<IProjectRepository, ProjectRepository>();
+      services.AddDefaultIdentity<ApplicationUser>()
+        .AddEntityFrameworkStores<NLighthouseDbContext>();
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
     }
 

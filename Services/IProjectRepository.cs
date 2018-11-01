@@ -12,5 +12,7 @@ namespace NLightHouse.Services
     Task<Project[]> GetAllProjectsAsync();
 
     Task<bool> CancelProjectAsync(Guid id);
+
+    Task<Project[]> GetUserRelatedProjectsAsync(ApplicationUser user);
   }
 }
