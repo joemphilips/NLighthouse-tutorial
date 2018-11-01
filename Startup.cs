@@ -39,6 +39,7 @@ namespace NLightHouse
       services.AddDbContext<NLighthouseDbContext>();
       services.AddScoped<IProjectRepository, ProjectRepository>();
       services.AddDefaultIdentity<ApplicationUser>()
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<NLighthouseDbContext>();
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
     }
