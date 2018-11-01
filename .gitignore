@@ -1,6 +1,6 @@
-bin
-obj
-mydb/*
-!mydb/.gitkeep
-!mydb/first/.gitkeep
-!mydb/nbxplorer/.gitkeep
+NLightHouse/bin
+NLightHouse/obj
+NLightHouse/mydb/*
+!NLightHouse/mydb/.gitkeep
+!NLightHouse/mydb/first/.gitkeep
+!NLightHouse/mydb/nbxplorer/.gitkeep
